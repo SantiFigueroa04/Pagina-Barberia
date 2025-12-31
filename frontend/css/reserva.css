@@ -1,0 +1,324 @@
+/* Estilos específicos para la página de reserva */
+
+.reserva-page {
+    padding: 60px 0;
+}
+
+.reserva-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.reserva-header {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #333 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.reserva-header h1 {
+    margin-bottom: 10px;
+}
+
+.reserva-header p {
+    opacity: 0.9;
+}
+
+/* Pasos de la reserva */
+.reserva-pasos {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.paso-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 0 20px;
+}
+
+.paso-item.active .paso-numero {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.paso-item.completed .paso-numero {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.paso-numero {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+.paso-label {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+}
+
+.paso-item.active .paso-label {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+/* Línea entre pasos */
+.paso-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    width: 20px;
+    height: 2px;
+    background-color: #eee;
+}
+
+/* Contenido de cada paso */
+.reserva-contenido {
+    padding: 40px;
+}
+
+.paso-contenido {
+    display: none;
+}
+
+.paso-contenido.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Selección de barbero/servicio */
+.seleccion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.item-seleccionable {
+    border: 2px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.item-seleccionable:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+.item-seleccionable.seleccionado {
+    border-color: var(--primary-color);
+    background-color: rgba(212, 175, 55, 0.05);
+}
+
+.item-seleccionable img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #eee;
+}
+
+.item-seleccionable.seleccionado img {
+    border-color: var(--primary-color);
+}
+
+/* Calendario */
+.calendario-container {
+    margin-top: 20px;
+}
+
+.dias-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.dia-calendario {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.dia-calendario:hover {
+    border-color: var(--primary-color);
+}
+
+.dia-calendario.seleccionado {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.dia-calendario.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+}
+
+.horas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.hora-btn {
+    padding: 10px;
+    border: 1px solid #eee;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.hora-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.hora-btn.seleccionado {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.hora-btn.disponible {
+    background-color: #e8f5e9;
+    border-color: #c8e6c9;
+}
+
+.hora-btn.no-disponible {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f5f5f5;
+}
+
+/* Formulario de datos */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* Resumen de reserva */
+.resumen-reserva {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.resumen-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.resumen-item:last-child {
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Botones de navegación */
+.reserva-navegacion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-siguiente {
+    margin-left: auto;
+}
+
+.btn-anterior {
+    margin-right: auto;
+}
+
+/* Spinner de carga */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mensajes */
+.mensaje-exito {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #c3e6cb;
+    margin-bottom: 20px;
+}
+
+.mensaje-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #f5c6cb;
+    margin-bottom: 20px;
+}

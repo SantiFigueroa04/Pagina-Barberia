@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Turno - Barbería Elite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reserva.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" style="color: white; text-decoration: none;">
+                    <i class="fas fa-cut"></i>
+                    <span class="logo-text">BARBERÍA ELITE</span>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html">Inicio</a>
+                <a href="index.html#barberos">Barberos</a>
+                <a href="index.html#servicios">Servicios</a>
+                <a href="mis-turnos.html">Mis Turnos</a>
+                <a href="login-barbero.html" class="btn-login">
+                    <i class="fas fa-user-tie"></i> Barberos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Página de Reserva -->
+    <main class="reserva-page">
+        <div class="container">
+            <div class="reserva-container">
+                <!-- Encabezado -->
+                <div class="reserva-header">
+                    <h1><i class="fas fa-calendar-plus"></i> Reservar Turno</h1>
+                    <p>Sigue los pasos para agendar tu cita</p>
+                </div>
+
+                <!-- Pasos -->
+                <div class="reserva-pasos">
+                    <div class="paso-item active" data-paso="1">
+                        <div class="paso-numero">1</div>
+                        <div class="paso-label">Barbero</div>
+                    </div>
+                    <div class="paso-item" data-paso="2">
+                        <div class="paso-numero">2</div>
+                        <div class="paso-label">Servicio</div>
+                    </div>
+                    <div class="paso-item" data-paso="3">
+                        <div class="paso-numero">3</div>
+                        <div class="paso-label">Fecha/Hora</div>
+                    </div>
+                    <div class="paso-item" data-paso="4">
+                        <div class="paso-numero">4</div>
+                        <div class="paso-label">Confirmar</div>
+                    </div>
+                </div>
+
+                <!-- Contenido de los pasos -->
+                <div class="reserva-contenido">
+                    <!-- Paso 1: Seleccionar Barbero -->
+                    <div class="paso-contenido active" id="paso-1">
+                        <h2>Selecciona tu Barbero</h2>
+                        <p>Elige al profesional con el que te gustaría atenderte</p>
+                        <div class="seleccion-grid" id="barberos-lista">
+                            <!-- Cargado por JavaScript -->
+                        </div>
+                        <div class="reserva-navegacion">
+                            <a href="index.html" class="btn btn-secondary btn-anterior">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                            <button class="btn btn-primary btn-siguiente" onclick="siguientePaso()" disabled>
+                                Siguiente <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Seleccionar Servicio -->
+                    <div class="paso-contenido" id="paso-2">
+                        <h2>Selecciona el Servicio</h2>
+                        <p>¿Qué servicio te gustaría recibir?</p>
+                        <div class="seleccion-grid" id="servicios-lista">
+                            <!-- Cargado por JavaScript -->
+                        </div>
+                        <div class="reserva-navegacion">
+                            <button class="btn btn-secondary btn-anterior" onclick="anteriorPaso()">
+                                <i class="fas fa-arrow-left"></i> Anterior
+                            </button>
+                            <button class="btn btn-primary btn-siguiente" onclick="siguientePaso()" disabled>
+                                Siguiente <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 3: Seleccionar Fecha y Hora -->
+                    <div class="paso-contenido" id="paso-3">
+                        <h2>Selecciona Fecha y Hora</h2>
+                        <p>Elige el día y la hora que más te convenga</p>
+                        
+                        <div class="calendario-container">
+                            <div class="form-group">
+                                <label for="fecha-reserva">Fecha:</label>
+                                <input type="date" id="fecha-reserva" class="form-control" 
+                                       min="" max="">
+                            </div>
+                            
+                            <div id="horas-container" style="margin-top: 20px;">
+                                <p>Selecciona una fecha primero</p>
+                            </div>
+                        </div>
+
+                        <div class="reserva-navegacion">
+                            <button class="btn btn-secondary btn-anterior" onclick="anteriorPaso()">
+                                <i class="fas fa-arrow-left"></i> Anterior
+                            </button>
+                            <button class="btn btn-primary btn-siguiente" onclick="siguientePaso()" disabled>
+                                Siguiente <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 4: Confirmar Reserva -->
+                    <div class="paso-contenido" id="paso-4">
+                        <h2>Confirmar Reserva</h2>
+                        
+                        <!-- Resumen -->
+                        <div class="resumen-reserva" id="resumen-reserva">
+                            <h3>Resumen de tu reserva</h3>
+                            <!-- Llenado por JavaScript -->
+                        </div>
+
+                        <!-- Datos del cliente -->
+                        <div class="formulario-cliente">
+                            <h3>Tus datos</h3>
+                            <p>Ingresa tu nombre y teléfono para confirmar la reserva</p>
+                            
+                            <div class="form-group">
+                                <label for="nombre-cliente">Nombre completo *</label>
+                                <input type="text" id="nombre-cliente" class="form-control" 
+                                       placeholder="Ej: Juan Pérez" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="telefono-cliente">Teléfono *</label>
+                                <input type="tel" id="telefono-cliente" class="form-control" 
+                                       placeholder="Ej: 1122334455" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="notas-cliente">Notas adicionales (opcional)</label>
+                                <textarea id="notas-cliente" class="form-control" 
+                                          placeholder="Alguna preferencia o comentario..." 
+                                          rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="reserva-navegacion">
+                            <button class="btn btn-secondary btn-anterior" onclick="anteriorPaso()">
+                                <i class="fas fa-arrow-left"></i> Anterior
+                            </button>
+                            <button class="btn btn-success" onclick="confirmarReserva()" id="btn-confirmar">
+                                <i class="fas fa-check"></i> Confirmar Reserva
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 5: Confirmación Exitosa -->
+                    <div class="paso-contenido" id="paso-5">
+                        <div class="mensaje-exito" id="mensaje-exito">
+                            <!-- Mostrado después de reserva exitosa -->
+                        </div>
+                        
+                        <div class="reserva-navegacion" style="justify-content: center;">
+                            <a href="index.html" class="btn btn-primary">
+                                <i class="fas fa-home"></i> Volver al Inicio
+                            </a>
+                            <a href="mis-turnos.html" class="btn btn-secondary">
+                                <i class="fas fa-list"></i> Ver Mis Turnos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Barbería Elite</h4>
+                    <p>Reserva tu turno online</p>
+                </div>
+                <div class="footer-section">
+                    <h4>¿Necesitas ayuda?</h4>
+                    <p><i class="fas fa-phone"></i> +54 11 1234-5678</p>
+                    <p>Lunes a Sábado 9:00-20:00</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Sistema de Reservas © 2024</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/reserva.js" type="module"></script>
+</body>
+</html>

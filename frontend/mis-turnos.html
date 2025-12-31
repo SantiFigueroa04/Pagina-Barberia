@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Turnos - Barbería Elite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reserva.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html" style="color: white; text-decoration: none;">
+                    <i class="fas fa-cut"></i>
+                    <span class="logo-text">BARBERÍA ELITE</span>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html">Inicio</a>
+                <a href="index.html#barberos">Barberos</a>
+                <a href="index.html#servicios">Servicios</a>
+                <a href="reservar.html">Reservar</a>
+                <a href="login-barbero.html" class="btn-login">
+                    <i class="fas fa-user-tie"></i> Barberos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Página Mis Turnos -->
+    <main class="mis-turnos-page">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-calendar-alt"></i> Mis Turnos</h1>
+                <p>Consulta y gestiona todas tus reservas</p>
+            </div>
+
+            <!-- Buscar turnos por teléfono -->
+            <div class="busqueda-turnos">
+                <div class="busqueda-box">
+                    <h3><i class="fas fa-search"></i> Buscar mis turnos</h3>
+                    <p>Ingresa tu número de teléfono para ver tus reservas</p>
+                    
+                    <div class="busqueda-form">
+                        <input type="tel" id="telefono-busqueda" 
+                               placeholder="Ej: 1122334455" 
+                               class="form-control" 
+                               style="max-width: 300px; display: inline-block;">
+                        <button class="btn btn-primary" id="buscarBtn">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                        <button class="btn btn-secondary" id="limpiarBtn">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+
+                    <div class="cliente-info" id="cliente-info" style="display: none; margin-top: 20px;">
+                        <!-- Mostrado cuando se encuentra el cliente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultados -->
+            <div class="resultados-turnos">
+                <div id="resultados-container">
+                    <div class="estado-inicial">
+                        <div style="text-align: center; padding: 50px;">
+                            <i class="fas fa-calendar-alt" style="font-size: 4rem; color: #ccc; margin-bottom: 20px;"></i>
+                            <h3>Busca tus turnos</h3>
+                            <p>Ingresa tu número de teléfono para ver todas tus reservas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas del cliente -->
+            <div class="stats-cliente" id="stats-cliente" style="display: none;">
+                <h3><i class="fas fa-chart-pie"></i> Tus Estadísticas</h3>
+                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-turnos">0</div>
+                        <div class="stat-label">Total Turnos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="turnos-pendientes-cliente">0</div>
+                        <div class="stat-label">Pendientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="turnos-completados">0</div>
+                        <div class="stat-label">Completados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="barbero-favorito">-</div>
+                        <div class="stat-label">Barbero Favorito</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nueva reserva CTA -->
+            <div class="nueva-reserva-cta">
+                <div class="cta-content">
+                    <h3><i class="fas fa-calendar-plus"></i> ¿Necesitas un nuevo turno?</h3>
+                    <p>Reserva ahora con tu barbero preferido</p>
+                    <a href="reservar.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-plus"></i> Nueva Reserva
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>¿Necesitas ayuda?</h4>
+                    <p><i class="fas fa-phone"></i> +54 11 1234-5678</p>
+                    <p>Lunes a Sábado 9:00-20:00</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Políticas</h4>
+                    <p>Cancelación con 24h de anticipación</p>
+                    <p>Llegar 5 minutos antes</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Barbería Elite - Sistema de Reservas © 2024</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal para detalles -->
+    <div class="modal" id="detalleTurnoModal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Detalles del Turno</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="detalleTurnoBody">
+                <!-- Cargado dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/mis-turnos.js" type="module"></script>
+</body>
+</html>
