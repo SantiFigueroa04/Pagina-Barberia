@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbería Elite - Reserva de Turnos</title>
+    <title>Barbería Jaque - Reserva de Turnos</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/componentes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="assets/icons/scissors.svg" type="image/svg+xml">
+    <link rel="icon" href="./assets/icons/scissors.svg" type="image/svg+xml">
 </head>
 <body>
     <!-- Header -->
@@ -14,7 +15,7 @@
         <div class="container">
             <div class="logo">
                 <i class="fas fa-cut"></i>
-                <span class="logo-text">BARBERÍA ELITE</span>
+                <span class="logo-text">BARBERÍA JAQUE</span>
             </div>
             <nav class="main-nav">
                 <a href="#inicio">Inicio</a>
@@ -35,7 +36,7 @@
     <section id="inicio" class="hero-section">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">Estilo y Precisión desde 1995</h1>
+                <h1 class="hero-title">Estilo y Precisión desde 2023</h1>
                 <p class="hero-subtitle">Reserva tu turno con los mejores barberos de la ciudad</p>
                 <div class="hero-buttons">
                     <a href="#reservar" class="btn btn-primary">
@@ -116,7 +117,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>Barbería Elite</h4>
+                    <h4>Barbería Jaque</h4>
                     <p>Estilo y tradición desde 1995</p>
                 </div>
                 <div class="footer-section">
@@ -133,15 +134,16 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Sistema de Reservas Barbería Elite © 2024</p>
+                <p>Sistema de Reservas Barberia Jaque © 2024</p>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js"></script>
-    <script src="js/supabase-client.js"></script>
+    <script src="js/config.js" type="module"></script>
+    <script src="js/supabase-client.js" type="module"></script>
+    <script src="js/app.js" type="module"></script>
     <script src="js/main.js" type="module"></script>
 </body>
 </html>

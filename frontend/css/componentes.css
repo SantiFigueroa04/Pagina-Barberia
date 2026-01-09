@@ -1,0 +1,141 @@
+/* ESTADOS DE CARGA */
+.estado {
+  text-align: center;
+  padding: 40px;
+  grid-column: 1 / -1;
+  font-size: 1.1rem;
+}
+
+.estado i {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.estado-cargando {
+  color: #666;
+}
+
+.estado-vacio {
+  color: #888;
+  font-style: italic;
+}
+
+.estado-error {
+  color: #dc3545;
+}
+
+/* CARDS DE BARBEROS */
+.barberos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.barbero-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.barbero-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.barbero-foto {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 3px solid #333;
+}
+
+.barbero-card h3 {
+  margin: 1rem 0 0.5rem;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+.barbero-card .especialidad {
+  color: #666;
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+.barbero-card .estrellas {
+  color: #ffc107;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.btn-reservar {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 80%;
+  margin: 0 auto 1.5rem;
+  display: block;
+  transition: background 0.3s;
+}
+
+.btn-reservar:hover {
+  background: #555;
+}
+
+/* CARDS DE SERVICIOS */
+.servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.servicio-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.servicio-card:hover {
+  transform: translateY(-5px);
+}
+
+.servicio-card i {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.servicio-card h4 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.servicio-card p {
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.servicio-card .precio {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.servicio-card .duracion {
+  color: #888;
+  font-size: 0.9rem;
+}

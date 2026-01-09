@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html><body>
+    <div id="result"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    async function test() {
+        try {
+            const supabase = window.supabase.createClient(
+                'https://qpwmoczbsjtdanakzpqz.supabase.co',
+                'sb_publishable_l3RMYjthRrUqeMuHosdPMw_n9Wo7d-c'
+            );
+            
+            // Test 1: Barberos
+            const { data: barberos, error: e1 } = await supabase
+                .from('barberos')
+                .select('*')
+                .eq('activo', true);
+            
+            // Test 2: Servicios
+            const { data: servicios, error: e2 } = await supabase
+                .from('servicios')
+                .select('*');
+            
+            document.getElementById('result').innerHTML = `
+                <h2>Resultados:</h2>
+                <p>Barberos: ${barberos?.length || 0} ${e1 ? '(Error: ' + e1.message + ')' : ''}</p>
+                <p>Servicios: ${servicios?.length || 0} ${e2 ? '(Error: ' + e2.message + ')' : ''}</p>
+                
+                <h3>Detalles barberos:</h3>
+                <pre>${JSON.stringify(barberos, null, 2)}</pre>
+            `;
+            
+        } catch (error) {
+            document.getElementById('result').innerHTML = 
+                `<p style="color: red;">Error: ${error.message}</p>`;
+        }
+    }
+    
+    test();
+    </script>
+</body></html>

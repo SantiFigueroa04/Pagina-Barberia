@@ -1,38 +1,33 @@
-// Lógica principal de la página de inicio
-import { initSupabase, getBarberos, getServicios, getCurrentCliente } from './supabase-client.js';
+// main.js - VERSIÓN CORREGIDA
+import { initSupabase, getBarberos, getServicios } from './supabase-client.js';
 
-// Estado global
+// Estado
 const AppState = {
-    cliente: null,
     barberos: [],
-    servicios: [],
-    inicializado: false
+    servicios: []
 };
 
-// Inicializar aplicación
+// Inicializar
 async function inicializarApp() {
-    console.log('🚀 Iniciando aplicación de barbería...');
+    console.log('🚀 Inicializando app...');
     
     try {
         // 1. Inicializar Supabase
         const supabase = initSupabase();
         if (!supabase) {
-            mostrarError('No se pudo conectar con la base de datos');
+            mostrarError('Error de conexión');
             return;
         }
+
+        // 2. Cargar datos
+        await cargarBarberos();
+        await cargarServicios();
         
-        // 2. Obtener cliente actual (si existe)
-        AppState.cliente = getCurrentCliente();
-        
-        // 3. Cargar barberos y servicios
-        await Promise.all([cargarBarberos(), cargarServicios()]);
-        
-        AppState.inicializado = true;
-        console.log('✅ Aplicación inicializada correctamente');
+        console.log('✅ App inicializada');
         
     } catch (error) {
-        console.error('❌ Error al inicializar:', error);
-        mostrarError('Error al cargar los datos. Por favor, recarga la página.');
+        console.error('❌ Error:', error);
+        mostrarError('Error al cargar los datos');
     }
 }
 
@@ -41,34 +36,33 @@ async function cargarBarberos() {
     const container = document.getElementById('barberos-container');
     if (!container) return;
     
-    container.innerHTML = '<div class="loading">Cargando barberos...</div>';
+    container.innerHTML = '<p>Cargando barberos...</p>';
     
     const { data: barberos, error } = await getBarberos();
     
     if (error) {
-        container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+        container.innerHTML = `<p class="error">Error: ${error}</p>`;
         return;
     }
     
-    if (!barberos || barberos.length === 0) {
-        container.innerHTML = '<p>No hay barberos disponibles en este momento</p>';
+    AppState.barberos = barberos || [];
+    
+    if (barberos.length === 0) {
+        container.innerHTML = '<p>No hay barberos disponibles</p>';
         return;
     }
-    
-    AppState.barberos = barberos;
     
     container.innerHTML = barberos.map(barbero => `
         <div class="barbero-card">
-            <img src="${barbero.foto_url || 'assets/images/default-barber.jpg'}" 
-                 alt="${barbero.nombre}" 
-                 class="barbero-img"
-                 onerror="this.src='assets/images/default-barber.jpg'">
+            <img src="${barbero.foto_url || 'https://images.unsplash.com/photo-1567894340315-735d7c361db0?w=400&h=400&fit=crop'}" 
+                 alt="${barbero.especialidad}"
+                 class="barbero-img">
             <div class="barbero-info">
-                <h3>${barbero.nombre}</h3>
-                <p class="especialidad">${barbero.especialidad || 'Barbero profesional'}</p>
-                <p class="descripcion">${barbero.descripcion || 'Especialista en cortes clásicos y modernos'}</p>
-                <a href="reservar.html?barbero=${barbero.id}" class="btn btn-primary">
-                    <i class="fas fa-calendar-plus"></i> Reservar con ${barbero.nombre.split(' ')[0]}
+                <h3>${barbero.especialidad}</h3>
+                <p class="especialidad">${barbero.descripcion || 'Barbero profesional'}</p>
+                <p class="calificacion">⭐ ${barbero.calificacion || '5.0'}</p>
+                <a href="reservar.html" class="btn btn-primary">
+                    <i class="fas fa-calendar-plus"></i> Reservar
                 </a>
             </div>
         </div>
@@ -83,16 +77,16 @@ async function cargarServicios() {
     const { data: servicios, error } = await getServicios();
     
     if (error) {
-        console.error('Error cargando servicios:', error);
+        console.error('Error servicios:', error);
         return;
     }
+    
+    AppState.servicios = servicios || [];
     
     if (!servicios || servicios.length === 0) {
         container.innerHTML = '<p>No hay servicios disponibles</p>';
         return;
     }
-    
-    AppState.servicios = servicios;
     
     container.innerHTML = servicios.map(servicio => `
         <div class="servicio-card">
@@ -111,65 +105,19 @@ function mostrarError(mensaje) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.innerHTML = `
-        <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin: 20px; text-align: center;">
+        <div style="background: #f8d7da; color: #721c24; padding: 15px; margin: 20px; border-radius: 5px;">
             <i class="fas fa-exclamation-circle"></i> ${mensaje}
         </div>
     `;
-    
-    // Insertar al inicio del body
     document.body.prepend(errorDiv);
 }
 
-// Actualizar información del cliente en la UI
-function actualizarInfoCliente() {
-    const clienteInfo = document.getElementById('cliente-info');
-    if (clienteInfo && AppState.cliente) {
-        clienteInfo.innerHTML = `
-            <p><i class="fas fa-user-check"></i> Bienvenido de nuevo, ${AppState.cliente.nombre}</p>
-            <p><small>Tu teléfono: ${AppState.cliente.telefono}</small></p>
-        `;
-    }
-}
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', inicializarApp);
 
-// Navegación suave para anchor links
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar app
-    inicializarApp();
-    
-    // Smooth scroll para anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Menú responsive
-    const menuToggle = document.querySelector('.menu-toggle');
-    const mainNav = document.querySelector('.main-nav');
-    
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function() {
-            mainNav.classList.toggle('active');
-        });
-    }
-});
-
-// Hacer funciones disponibles globalmente si es necesario
+// Hacer disponible globalmente
 window.App = {
     state: AppState,
-    inicializarApp,
     cargarBarberos,
     cargarServicios
 };
-
-console.log('✅ main.js cargado');

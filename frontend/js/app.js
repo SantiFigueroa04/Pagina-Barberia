@@ -1,134 +1,130 @@
-// Archivo principal de la aplicación
+// app.js - SOLO LÓGICA, SIN ESTILOS
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('🚀 Aplicación iniciada');
+  console.log('🚀 Barbería Jaque - Cargando...');
   
-  // Probar conexión al cargar
-  probarConexionInicial();
+  // Inicializar Supabase
+  const supabase = inicializarSupabase();
+  if (!supabase) return;
   
-  // Cargar datos si estamos en la página principal
+  // Cargar contenido según la página
   if (document.getElementById('barberos-container')) {
-    cargarBarberos();
-    cargarServicios();
+    cargarBarberos(supabase);
   }
   
-  // Configurar botones si existen
-  configurarBotones();
+  if (document.getElementById('servicios-container')) {
+    cargarServicios(supabase);
+  }
 });
 
-// 1. Probar conexión con Supabase
-async function probarConexionInicial() {
-  const conexionExitosa = await window.supabaseClient.probarConexion();
-  
-  if (conexionExitosa) {
-    console.log('🌐 Conectado a Supabase correctamente');
-  } else {
-    console.error('❌ No se pudo conectar a Supabase');
-    alert('Error de conexión con la base de datos');
+// FUNCIONES PRINCIPALES
+function inicializarSupabase() {
+  try {
+    const url = 'https://qpwmoczbsjtdanakzpqz.supabase.co';
+    const key = 'sb_publishable_l3RMYjthRrUqeMuHosdPMw_n9Wo7d-c';
+    return window.supabase.createClient(url, key);
+  } catch (error) {
+    console.error('❌ Error Supabase:', error);
+    return null;
   }
 }
 
-// 2. Cargar barberos y mostrarlos
-async function cargarBarberos() {
+async function cargarBarberos(supabase) {
   const container = document.getElementById('barberos-container');
   if (!container) return;
   
-  container.innerHTML = '<p>Cargando barberos...</p>';
+  mostrarEstado(container, 'cargando', 'Cargando barberos...');
   
-  const barberos = await window.supabaseClient.obtenerBarberos();
-  
-  if (barberos.length === 0) {
-    container.innerHTML = '<p>No hay barberos disponibles</p>';
-    return;
+  try {
+    const { data: barberos, error } = await supabase
+      .from('barberos')
+      .select('*');
+    
+    if (error) throw error;
+    
+    console.log('✅ Barberos:', barberos);
+    
+    if (!barberos?.length) {
+      mostrarEstado(container, 'vacio', 'No hay barberos disponibles');
+      return;
+    }
+    
+    container.innerHTML = barberos.map(crearBarberoHTML).join('');
+    
+  } catch (error) {
+    console.error('❌ Error:', error);
+    mostrarEstado(container, 'error', 'Error al cargar');
   }
-  
-  container.innerHTML = barberos.map(barbero => `
-    <div class="barbero-card">
-      <h3>${barbero.nombre}</h3>
-      <p>${barbero.especialidad || 'Barbero profesional'}</p>
-      <button onclick="seleccionarBarbero('${barbero.id}')">
-        Seleccionar
-      </button>
-    </div>
-  `).join('');
 }
 
-// 3. Cargar servicios
-async function cargarServicios() {
+async function cargarServicios(supabase) {
   const container = document.getElementById('servicios-container');
   if (!container) return;
   
-  const servicios = await window.supabaseClient.obtenerServicios();
-  
-  if (servicios.length === 0) {
-    container.innerHTML = '<p>No hay servicios disponibles</p>';
-    return;
+  try {
+    const { data: servicios, error } = await supabase
+      .from('servicios')
+      .select('*');
+    
+    if (error) throw error;
+    
+    if (servicios?.length) {
+      container.innerHTML = servicios.map(crearServicioHTML).join('');
+    }
+  } catch (error) {
+    console.error('Error servicios:', error);
   }
+}
+
+// FUNCIONES DE CREACIÓN DE HTML
+function crearBarberoHTML(barbero) {
+  const nombre = barbero.nombre || barbero.name || 'Barbero';
+  const especialidad = barbero.especialidad || 'Especialista';
+  const foto = barbero.foto_url || `https://ui-avatars.com/api/?name=${nombre}&background=333&color=fff`;
+  const valoracion = barbero.valoracion || 5;
   
-  container.innerHTML = servicios.map(servicio => `
-    <div class="servicio-card">
-      <h4>${servicio.nombre}</h4>
-      <p>${servicio.descripcion || ''}</p>
-      <p>Precio: $${servicio.precio}</p>
-      <p>Duración: ${servicio.duracion_min} min</p>
-      <button onclick="seleccionarServicio('${servicio.id}')">
-        Seleccionar
+  return `
+    <div class="barbero-card">
+      <img src="${foto}" alt="${nombre}" class="barbero-foto">
+      <h3>${nombre}</h3>
+      <p class="especialidad">${especialidad}</p>
+      <div class="estrellas">${'★'.repeat(valoracion)}${'☆'.repeat(5 - valoracion)}</div>
+      <button class="btn-reservar" onclick="reservarBarbero('${barbero.id}', '${nombre}')">
+        Reservar
       </button>
     </div>
-  `).join('');
+  `;
 }
 
-// 4. Configurar botones básicos
-function configurarBotones() {
-  // Botón de login
-  const loginBtn = document.getElementById('login-btn');
-  if (loginBtn) {
-    loginBtn.addEventListener('click', async function() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      
-      const resultado = await window.supabaseClient.iniciarSesion(email, password);
-      
-      if (resultado.success) {
-        alert('✅ Login exitoso');
-        window.location.href = 'panel.html';
-      } else {
-        alert('❌ Error: ' + resultado.error);
-      }
-    });
-  }
+function crearServicioHTML(servicio) {
+  return `
+    <div class="servicio-card">
+      <i class="${servicio.icono || 'fas fa-cut'}"></i>
+      <h4>${servicio.nombre}</h4>
+      <p>${servicio.descripcion || ''}</p>
+      <div class="precio">$${servicio.precio}</div>
+      <div class="duracion">${servicio.duracion || 30} min</div>
+    </div>
+  `;
+}
+
+// FUNCIONES UTILITARIAS
+function mostrarEstado(container, tipo, mensaje) {
+  const iconos = {
+    cargando: 'fa-spinner fa-spin',
+    vacio: 'fa-info-circle',
+    error: 'fa-exclamation-triangle'
+  };
   
-  // Botón de registro
-  const registerBtn = document.getElementById('register-btn');
-  if (registerBtn) {
-    registerBtn.addEventListener('click', async function() {
-      const nombre = document.getElementById('nombre').value;
-      const email = document.getElementById('email').value;
-      const telefono = document.getElementById('telefono').value;
-      const password = document.getElementById('password').value;
-      
-      const resultado = await window.supabaseClient.registrarUsuario(
-        email, password, nombre, telefono
-      );
-      
-      if (resultado.success) {
-        alert('✅ Registro exitoso. Revisa tu email.');
-      } else {
-        alert('❌ Error: ' + resultado.error);
-      }
-    });
-  }
+  container.innerHTML = `
+    <div class="estado estado-${tipo}">
+      <i class="fas ${iconos[tipo]}"></i>
+      <span>${mensaje}</span>
+    </div>
+  `;
 }
 
-// 5. Funciones para seleccionar (ejemplos)
-function seleccionarBarbero(barberoId) {
-  console.log('Barbero seleccionado:', barberoId);
-  // Aquí guardarías en una variable global o localStorage
-  localStorage.setItem('barberoSeleccionado', barberoId);
-  alert('Barbero seleccionado');
-}
-
-function seleccionarServicio(servicioId) {
-  console.log('Servicio seleccionado:', servicioId);
-  localStorage.setItem('servicioSeleccionado', servicioId);
-  alert('Servicio seleccionado');
-}
+// FUNCIONES GLOBALES
+window.reservarBarbero = function(id, nombre) {
+  localStorage.setItem('barberoSeleccionado', id);
+  window.location.href = 'reservar.html';
+};
